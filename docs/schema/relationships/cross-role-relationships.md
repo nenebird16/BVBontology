@@ -2,9 +2,9 @@
 
 This document defines the relationships that connect different user roles in the BeachBook knowledge graph.
 
-## REQUESTED_FEEDBACK_FROM (Player→Coach)
+## REQUESTED_FEEDBACK_FROM (Person:Athlete→Person:Coach)
 
-A player explicitly asking for input on specific skills or performance.
+An athlete explicitly asking for input on specific skills or performance.
 
 **Properties:**
 - `timestamp`: When the request was made
@@ -14,9 +14,9 @@ A player explicitly asking for input on specific skills or performance.
 
 **Example:**
 ```cypher
-MATCH (p:Player {id: 'player123'})
-MATCH (c:Coach {id: 'coach456'})
-CREATE (p)-[r:REQUESTED_FEEDBACK_FROM {
+MATCH (a:Person:Athlete {id: 'athlete123'})
+MATCH (c:Person:Coach {id: 'coach456'})
+CREATE (a)-[r:REQUESTED_FEEDBACK_FROM {
   timestamp: datetime(),
   context: 'competition preparation',
   specificity: 'serving technique',
@@ -24,9 +24,9 @@ CREATE (p)-[r:REQUESTED_FEEDBACK_FROM {
 }]->(c)
 ```
 
-## SHARED_WITH (Player→Coach)
+## SHARED_WITH (Person:Athlete→Person:Coach)
 
-Player explicitly sharing reflection, video, or other content with coach.
+Athlete explicitly sharing reflection, video, or other content with coach.
 
 **Properties:**
 - `timestamp`: When the sharing occurred
@@ -36,10 +36,10 @@ Player explicitly sharing reflection, video, or other content with coach.
 
 **Example:**
 ```cypher
-MATCH (p:Player {id: 'player123'})
-MATCH (c:Coach {id: 'coach456'})
+MATCH (a:Person:Athlete {id: 'athlete123'})
+MATCH (c:Person:Coach {id: 'coach456'})
 MATCH (r:Reflection {id: 'reflection789'})
-CREATE (p)-[s:SHARED_WITH {
+CREATE (a)-[s:SHARED_WITH {
   timestamp: datetime(),
   content_type: 'reflection',
   permission_duration: 'permanent',
@@ -48,9 +48,9 @@ CREATE (p)-[s:SHARED_WITH {
 CREATE (r)-[:ACCESSIBLE_TO]->(c)
 ```
 
-## RESPONDED_TO (Coach→Player)
+## RESPONDED_TO (Person:Coach→Person:Athlete)
 
-Coach providing feedback to player request or shared content.
+Coach providing feedback to athlete request or shared content.
 
 **Properties:**
 - `timestamp`: When the response was given
@@ -60,33 +60,33 @@ Coach providing feedback to player request or shared content.
 
 **Example:**
 ```cypher
-MATCH (c:Coach {id: 'coach456'})
-MATCH (p:Player {id: 'player123'})
+MATCH (c:Person:Coach {id: 'coach456'})
+MATCH (a:Person:Athlete {id: 'athlete123'})
 MATCH (f:Feedback {id: 'feedback101'})
 CREATE (c)-[r:RESPONDED_TO {
   timestamp: datetime(),
   response_time: duration('PT8H'),
   depth: 'detailed',
   actionability: 'high'
-}]->(p)
+}]->(a)
 CREATE (c)-[:PROVIDED]->(f)
 CREATE (f)-[:REGARDING]->(:Skill {name: 'jump serve'})
 ```
 
-## RECOMMENDED (Coach→Drill)
+## RECOMMENDED (Person:Coach→Drill)
 
-Coach suggesting specific practice activities for player.
+Coach suggesting specific practice activities for athlete.
 
 **Properties:**
 - `timestamp`: When recommended
 - `priority`: Importance level
 - `reasoning`: Why it was suggested
-- `customization`: Any player-specific adaptations
+- `customization`: Any athlete-specific adaptations
 
 **Example:**
 ```cypher
-MATCH (c:Coach {id: 'coach456'})
-MATCH (p:Player {id: 'player123'})
+MATCH (c:Person:Coach {id: 'coach456'})
+MATCH (a:Person:Athlete {id: 'athlete123'})
 MATCH (d:Drill {id: 'drill202'})
 CREATE (c)-[r:RECOMMENDED {
   timestamp: datetime(),
@@ -94,12 +94,12 @@ CREATE (c)-[r:RECOMMENDED {
   reasoning: 'improve arm swing mechanics',
   customization: 'focus on contact point height'
 }]->(d)
-CREATE (p)-[:RECEIVED_RECOMMENDATION]->(d)
+CREATE (a)-[:RECEIVED_RECOMMENDATION]->(d)
 ```
 
-## SELF_ASSESSED (Player→Skill)
+## SELF_ASSESSED (Person:Athlete→Skill)
 
-Player's evaluation of their own skill execution.
+Athlete's evaluation of their own skill execution.
 
 **Properties:**
 - `timestamp`: When assessment occurred
@@ -110,9 +110,9 @@ Player's evaluation of their own skill execution.
 
 **Example:**
 ```cypher
-MATCH (p:Player {id: 'player123'})
+MATCH (a:Person:Athlete {id: 'athlete123'})
 MATCH (s:Skill {name: 'jump serve'})
-CREATE (p)-[sa:SELF_ASSESSED {
+CREATE (a)-[sa:SELF_ASSESSED {
   timestamp: datetime(),
   rating: 7,
   confidence: 'medium',
@@ -121,39 +121,39 @@ CREATE (p)-[sa:SELF_ASSESSED {
 }]->(s)
 ```
 
-## COACH_ASSESSED (Coach→Skill)
+## COACH_ASSESSED (Person:Coach→Skill)
 
-Coach's evaluation of player's skill execution.
+Coach's evaluation of athlete's skill execution.
 
 **Properties:**
 - `timestamp`: When assessment occurred
-- `player_id`: Player being assessed
+- `athlete_id`: Athlete being assessed
 - `rating`: Numerical evaluation (1-10)
 - `technical_notes`: Specific observations
 - `developmental_stage`: Progress in skill acquisition
 
 **Example:**
 ```cypher
-MATCH (c:Coach {id: 'coach456'})
-MATCH (p:Player {id: 'player123'})
+MATCH (c:Person:Coach {id: 'coach456'})
+MATCH (a:Person:Athlete {id: 'athlete123'})
 MATCH (s:Skill {name: 'jump serve'})
 CREATE (c)-[ca:COACH_ASSESSED {
   timestamp: datetime(),
-  player_id: 'player123',
+  athlete_id: 'athlete123',
   rating: 6,
   technical_notes: 'inconsistent toss height',
   developmental_stage: 'conscious competence'
 }]->(s)
-CREATE (ca)-[:REGARDING]->(p)
+CREATE (ca)-[:REGARDING]->(a)
 ```
 
-## ASSESSMENT_GAP (Player→Coach)
+## ASSESSMENT_GAP (Person:Athlete→Person:Coach)
 
 Relationship capturing the difference between self and coach assessment.
 
 **Properties:**
 - `skill_id`: Skill being assessed
-- `self_rating`: Player's score
+- `self_rating`: Athlete's score
 - `coach_rating`: Coach's score
 - `gap_value`: Numerical difference
 - `gap_category`: Overestimation/underestimation/aligned
@@ -162,13 +162,13 @@ Relationship capturing the difference between self and coach assessment.
 
 **Example:**
 ```cypher
-MATCH (p:Player {id: 'player123'})
-MATCH (c:Coach {id: 'coach456'})
+MATCH (a:Person:Athlete {id: 'athlete123'})
+MATCH (c:Person:Coach {id: 'coach456'})
 MATCH (s:Skill {name: 'jump serve'})
-MATCH (p)-[sa:SELF_ASSESSED]->(s)
+MATCH (a)-[sa:SELF_ASSESSED]->(s)
 MATCH (c)-[ca:COACH_ASSESSED]->(s)
 WHERE sa.timestamp > datetime('2022-06-01') AND ca.timestamp > datetime('2022-06-01')
-CREATE (p)-[ag:ASSESSMENT_GAP {
+CREATE (a)-[ag:ASSESSMENT_GAP {
   skill_id: s.id,
   self_rating: sa.rating,
   coach_rating: ca.rating,
@@ -181,4 +181,4 @@ CREATE (p)-[ag:ASSESSMENT_GAP {
 }]->(c)
 ```
 
-This relationship is particularly valuable for identifying development opportunities and calibrating player self-awareness. The `gap_value` and `gap_category` properties help prioritize areas where player perception differs significantly from coach assessment.
+This relationship is particularly valuable for identifying development opportunities and calibrating athlete self-awareness. The `gap_value` and `gap_category` properties help prioritize areas where athlete perception differs significantly from coach assessment.
