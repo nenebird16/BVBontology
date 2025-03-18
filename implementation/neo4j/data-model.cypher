@@ -5,7 +5,8 @@
 // Ensure entity uniqueness
 
 // User Entities
-CREATE CONSTRAINT athlete_name IF NOT EXISTS FOR (a:Athlete) REQUIRE a.name IS UNIQUE;
+CREATE CONSTRAINT person_athlete_name IF NOT EXISTS FOR (a:Person:Athlete) REQUIRE a.name IS UNIQUE;
+CREATE CONSTRAINT person_coach_name IF NOT EXISTS FOR (c:Person:Coach) REQUIRE c.name IS UNIQUE;
 CREATE CONSTRAINT training_group_name IF NOT EXISTS FOR (t:TrainingGroup) REQUIRE t.name IS UNIQUE;
 
 // Activity Entities
@@ -24,6 +25,10 @@ CREATE CONSTRAINT feature_name IF NOT EXISTS FOR (f:Feature) REQUIRE f.name IS U
 CREATE INDEX skill_category IF NOT EXISTS FOR (s:Skill) ON (s.category);
 CREATE INDEX drill_focus IF NOT EXISTS FOR (d:Drill) ON (d.focus_area);
 CREATE INDEX framework_category IF NOT EXISTS FOR (f:Framework) ON (f.category);
+
+// Person related indexes
+CREATE INDEX person_name IF NOT EXISTS FOR (p:Person) ON (p.name);
+CREATE INDEX athlete_skill_level IF NOT EXISTS FOR (a:Person:Athlete) ON (a.skill_level);
 
 // ========== BASE ENTITY TYPES ==========
 // Create basic node structure
@@ -150,8 +155,8 @@ CREATE (e2:Equipment {
   variations: 'Wall-mounted, floor-positioned, court integration versions'
 });
 
-// Create Athlete nodes
-CREATE (a1:Athlete {
+// Create Person:Athlete nodes
+CREATE (a1:Person:Athlete {
   name: 'Alex Johnson',
   skill_level: 'Advanced',
   position: 'Blocker',
@@ -160,13 +165,22 @@ CREATE (a1:Athlete {
   learning_preferences: 'Visual demonstration, deliberate practice'
 });
 
-CREATE (a2:Athlete {
+CREATE (a2:Person:Athlete {
   name: 'Sam Rivera',
   skill_level: 'Intermediate',
   position: 'Defender',
   visual_strengths: 'Defensive positioning, attack reading',
   visual_development_areas: 'Trajectory prediction at high speeds',
   learning_preferences: 'Progressive challenge, conceptual understanding'
+});
+
+// Create Person:Coach nodes
+CREATE (c1:Person:Coach {
+  name: 'Sarah Smith',
+  specialties: 'Defensive training, visual skill development',
+  certification_level: 'Advanced',
+  philosophy: 'Progressive challenge, visual-motor integration',
+  playing_level: 'Advanced'
 });
 
 // Create Training Group nodes
@@ -201,7 +215,7 @@ CREATE (feat2:Feature {
   name: 'Visual Skill Development Tracker',
   description: 'Tool to monitor progress in visual-motor integration skills',
   dependencies: 'Assessment data, framework linkages',
-  user_roles: 'Player, Coach',
+  user_roles: 'Athlete, Coach',
   technical_requirements: 'Time-series data visualization, assessment tools'
 });
 
@@ -246,3 +260,16 @@ CREATE (a1)-[:SELF_ASSESSED {
   confidence: 'medium',
   context: 'competition preparation'
 }]->(s3);
+
+// Create coach assessment relationship
+CREATE (c1)-[:COACH_ASSESSED {
+  timestamp: datetime('2022-07-16'),
+  athlete_id: 'Alex Johnson',
+  rating: 6,
+  technical_notes: 'Inconsistent toss height',
+  developmental_stage: 'conscious competence'
+}]->(s3);
+
+// Create relationship between coach and athlete
+CREATE (c1)-[:TRAINS]->(a1);
+CREATE (c1)-[:TRAINS]->(a2);
