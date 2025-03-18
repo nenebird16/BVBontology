@@ -1,10 +1,10 @@
 # BVBontology
 
-Knowledge graph schema and ontology for beach volleyball coaching and player development.
+Knowledge graph schema and ontology for beach volleyball coaching and athlete development.
 
 ## Project Overview
 
-This repository contains the ontology and knowledge graph implementation for beach volleyball coaching and player development. It serves as the data foundation for the BeachBook application, integrating:
+This repository contains the ontology and knowledge graph implementation for beach volleyball coaching and athlete development. It serves as the data foundation for the BeachBook application, integrating:
 
 1. **Core Beach Volleyball Domain**
    - Skills (passing, setting, attacking, etc.)
@@ -23,27 +23,53 @@ This repository contains the ontology and knowledge graph implementation for bea
    - Feature dependencies and relationships
    - Practice plan generation connections
 
+## Entity Labeling Convention
+
+This project uses multiple labels for person entities:
+- `Person:Athlete` for volleyball players
+- `Person:Coach` for instructors and trainers
+- `Person:Trainer` for physical development specialists
+- `Person:ParentGuardian` for youth athlete oversight
+
+This approach explicitly models the is-a relationship (an Athlete is-a Person) and enables querying by role or generally as people. For example:
+
+```cypher
+// Find all people
+MATCH (p:Person) RETURN p
+
+// Find only athletes
+MATCH (a:Person:Athlete) RETURN a
+
+// Find coaches who are also athletes (player-coaches)
+MATCH (pc:Person:Coach:Athlete) RETURN pc
+```
+
+For consistent variable naming in queries:
+- Use `(a:Person:Athlete)` for athletes
+- Use `(c:Person:Coach)` for coaches
+- Use descriptive names for complex queries
+
 ## Core Beach Volleyball Principles
 
 This ontology enforces several fundamental principles of beach volleyball training:
 
 1. **2v2 Structure Preservation**: 
    - All drills and activities maintain the fundamental 2v2 team structure of beach volleyball
-   - Practice plans accommodate varying player numbers while preserving this core format
+   - Practice plans accommodate varying athlete numbers while preserving this core format
    - Special handling for odd-numbered groups through specialized roles
 
 2. **Court Capacity Optimization**:
-   - Optimal player count: 6 players per court (three teams of 2)
-   - Maximum player count: 8 players per court (four teams of 2)
-   - Special consideration for exactly 4 players (pure 2v2 gameplay focus)
+   - Optimal athlete count: 6 athletes per court (three teams of 2)
+   - Maximum athlete count: 8 athletes per court (four teams of 2)
+   - Special consideration for exactly 4 athletes (pure 2v2 gameplay focus)
 
 3. **Coach Integration**:
-   - Coaches can participate as players when needed for numbers
+   - Coaches can participate as athletes when needed for numbers
    - Coach participation is modeled with specific properties and relationships
-   - Special guidance for 3-player scenarios where coach participation creates 2v2
+   - Special guidance for 3-athlete scenarios where coach participation creates 2v2
 
 4. **Gameplay Constraints**:
-   - For 4-player (pure 2v2) practice sessions, emphasis on constraint-based coaching
+   - For 4-athlete (pure 2v2) practice sessions, emphasis on constraint-based coaching
    - Technical, tactical and decision-making constraints applied to gameplay
    - Maintains game flow while creating deliberate practice conditions
 
@@ -64,6 +90,7 @@ The knowledge graph emphasizes the visual-motor integration aspects of beach vol
 - `/docs`: Conceptual documentation of the ontology
   - `/schema`: Entity and relationship definitions
   - `/examples`: Sample use cases and data models
+  - `/glossary.md`: Comprehensive reference for all terms and entities
 - `/implementation`: Technical implementation details
   - `/neo4j`: Neo4j-specific schema and queries
   - `/cypher`: Common query patterns
@@ -84,7 +111,7 @@ To continue developing this knowledge graph:
 2. **Query Development**:
    - Create parameterized queries for practice plan generation
    - Build recommendation queries based on skill gaps
-   - Develop drill progression paths based on player skill levels
+   - Develop drill progression paths based on athlete skill levels
    - Add temporal analysis of skill development
 
 3. **Knowledge Graph Integration**:
@@ -97,7 +124,7 @@ To continue developing this knowledge graph:
    - Add weighted relationships for more nuanced recommendations
    - Implement temporal awareness for tracking improvement
    - Develop drill recommendation algorithms based on previous practice success
-   - Create player-specific adaptation models
+   - Create athlete-specific adaptation models
 
 5. **Maintenance Plan**:
    - Schedule regular updates from Notion databases
