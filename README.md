@@ -23,6 +23,30 @@ This repository contains the ontology and knowledge graph implementation for bea
    - Feature dependencies and relationships
    - Practice plan generation connections
 
+## Core Beach Volleyball Principles
+
+This ontology enforces several fundamental principles of beach volleyball training:
+
+1. **2v2 Structure Preservation**: 
+   - All drills and activities maintain the fundamental 2v2 team structure of beach volleyball
+   - Practice plans accommodate varying player numbers while preserving this core format
+   - Special handling for odd-numbered groups through specialized roles
+
+2. **Court Capacity Optimization**:
+   - Optimal player count: 6 players per court (three teams of 2)
+   - Maximum player count: 8 players per court (four teams of 2)
+   - Special consideration for exactly 4 players (pure 2v2 gameplay focus)
+
+3. **Coach Integration**:
+   - Coaches can participate as players when needed for numbers
+   - Coach participation is modeled with specific properties and relationships
+   - Special guidance for 3-player scenarios where coach participation creates 2v2
+
+4. **Gameplay Constraints**:
+   - For 4-player (pure 2v2) practice sessions, emphasis on constraint-based coaching
+   - Technical, tactical and decision-making constraints applied to gameplay
+   - Maintains game flow while creating deliberate practice conditions
+
 ## Current Implementation
 
 The knowledge graph emphasizes the visual-motor integration aspects of beach volleyball training while providing a structure that can support AI-assisted practice planning through the BeachBook application.
