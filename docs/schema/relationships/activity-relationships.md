@@ -190,4 +190,96 @@ CREATE (d)-[r:FOCUSES_ON {
 }]->(v)
 ```
 
+## REQUIRES_COURT_CAPACITY (Drill→CourtCapacity)
+
+Defines the player count requirements for a drill per court.
+
+**Properties:**
+- `optimal_players`: Ideal number of players (typically 6)
+- `maximum_players`: Maximum allowed (never exceeds 8)
+- `rotation_efficiency`: How well players cycle through active positions
+- `adapts_to_odd_count`: Whether drill can accommodate odd player counts
+
+**Example:**
+```cypher
+MATCH (d:Drill {name: 'King of the Court'})
+MATCH (cc:CourtCapacity)
+CREATE (d)-[r:REQUIRES_COURT_CAPACITY {
+  optimal_players: 6,
+  maximum_players: 8,
+  rotation_efficiency: "high",
+  adapts_to_odd_count: true
+}]->(cc)
+```
+
+## PARTICIPATES_AS (Coach→PracticeParticipant)
+
+Defines how a coach participates in practice sessions as a player.
+
+**Properties:**
+- `role`: Participation type (regular player, specialized position)
+- `primary_purpose`: Main reason for participation
+- `secondary_purpose`: Additional benefits
+- `usage_frequency`: How often coach participates
+- `energy_management`: How coach balances playing and coaching
+
+**Example:**
+```cypher
+MATCH (c:Coach {id: 'coach456'})
+MATCH (pp:PracticeParticipant)
+CREATE (c)-[r:PARTICIPATES_AS {
+  role: "Fill-in player",
+  primary_purpose: "Balance teams for 2v2 structure",
+  secondary_purpose: "Demonstrate techniques in game context",
+  usage_frequency: "As needed for odd numbers",
+  energy_management: "Limited rotations to maintain coaching focus"
+}]->(pp)
+```
+
+## APPLIES_CONSTRAINT (Coach→GameplayConstraint)
+
+Connects a coach to gameplay constraints they implement during practice.
+
+**Properties:**
+- `context`: When to apply this constraint
+- `progression`: How to increase difficulty
+- `feedback_approach`: How to provide input during constrained play
+- `success_metrics`: How to measure effectiveness
+
+**Example:**
+```cypher
+MATCH (c:Coach {id: 'coach456'})
+MATCH (gc:GameplayConstraint {name: 'Shot Selection Constraint'})
+CREATE (c)-[r:APPLIES_CONSTRAINT {
+  context: "4-player gameplay focus",
+  progression: "Begin with simple limitations, add complexity",
+  feedback_approach: "Immediate during natural breaks",
+  success_metrics: "Shot selection improvement in unconstrained play"
+}]->(gc)
+```
+
+## OPTIMAL_CONFIGURATION (CourtCapacity→OptimalConfiguration)
+
+Connects court capacity constraints to specific optimal player arrangements.
+
+**Properties:**
+- `player_count`: Number of players in this configuration
+- `formation`: How players are organized
+- `active_time_percentage`: Portion of time players are active
+- `rotation_trigger`: What causes player rotation
+- `rotation_pattern`: How players cycle through positions
+
+**Example:**
+```cypher
+MATCH (cc:CourtCapacity)
+MATCH (oc:OptimalConfiguration)
+CREATE (cc)-[r:OPTIMAL_CONFIGURATION {
+  player_count: 6,
+  formation: "Three teams of 2 rotating (king of the court)",
+  active_time_percentage: 67,
+  rotation_trigger: "Point completion",
+  rotation_pattern: "Winning team stays, losing team exits, waiting team enters"
+}]->(oc)
+```
+
 These relationships form the foundation of the beach volleyball training knowledge graph, connecting skills, drills, and conceptual frameworks in a semantically rich structure that supports practice planning and player development.
