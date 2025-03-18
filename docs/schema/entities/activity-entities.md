@@ -29,6 +29,11 @@ Structured practice exercise designed to develop specific skills.
 - `description`: Detailed explanation of the drill
 - `variations`: Alternative versions of the drill
 - `initiation`: How the drill begins (e.g., coach toss, partner feed)
+- `team_structure`: Fundamental player grouping (always "2v2" for beach volleyball)
+- `optimal_player_count`: Ideal number of players for this drill (typically 4-6)
+- `maximum_player_count`: Maximum players per court (never exceeds 8)
+- `allows_specialized_role`: Whether drill supports odd-player participation
+- `allows_gameplay_focus`: Whether drill is suitable for constraint-based gameplay
 
 **Usage Context:**
 Components of practice plans that players execute.
@@ -45,6 +50,9 @@ Training session involving multiple drills and activities.
 - `location`: Where practice took place
 - `weather_conditions`: Environmental factors
 - `progression`: Sequence of activities
+- `court_count`: Number of courts used
+- `players_per_court`: Distribution of players across courts
+- `maintains_2v2_structure`: Whether practice preserved fundamental 2v2 format
 
 **Usage Context:**
 Container for multiple training activities and reflection context.
@@ -77,6 +85,10 @@ Structured outline for a training session.
 - `equipment_needed`: Required materials
 - `warm_up`: Initial activities
 - `cool_down`: Concluding activities
+- `total_players`: Expected number of participants
+- `court_count`: Available courts for practice
+- `players_per_court`: Planned distribution of players
+- `coach_participation`: Whether coach will participate as player
 
 **Usage Context:**
 Blueprint for practice sessions, created by coaches and executed by players.
@@ -124,3 +136,30 @@ High-level tactical or strategic approach.
 
 **Usage Context:**
 Framework for organizing team patterns and individual decisions.
+
+## CourtCapacity
+
+Defines player distribution and utilization constraints for beach volleyball courts.
+
+**Properties:**
+- `optimal_players_per_court`: Recommended number (typically 6)
+- `maximum_players_per_court`: Absolute maximum (8)
+- `minimum_players_per_court`: Minimum for 2v2 play (4)
+- `rationale`: Explanation for these constraints
+
+**Usage Context:**
+Guides practice planning and player distribution across available courts.
+
+## GameplayConstraint
+
+Structured limitation applied to gameplay for targeted development.
+
+**Properties:**
+- `name`: Constraint identifier
+- `description`: How the constraint works
+- `skill_focus`: What skills this develops
+- `implementation`: How to apply in practice
+- `progression`: How to advance difficulty
+
+**Usage Context:**
+Applied primarily in 4-player (pure 2v2) contexts to create deliberate practice within gameplay.
