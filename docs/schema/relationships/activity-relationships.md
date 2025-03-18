@@ -62,9 +62,9 @@ CREATE (p)-[r:INCLUDES {
 }]->(d)
 ```
 
-## PRACTICED (Player→Skill)
+## PRACTICED (Person:Athlete→Skill)
 
-Records when a player has worked on a particular skill.
+Records when an athlete has worked on a particular skill.
 
 **Properties:**
 - `timestamp`: When the practice occurred
@@ -76,9 +76,9 @@ Records when a player has worked on a particular skill.
 
 **Example:**
 ```cypher
-MATCH (p:Player {id: 'player123'})
+MATCH (a:Person:Athlete {id: 'athlete123'})
 MATCH (s:Skill {name: 'Jump Serve'})
-CREATE (p)-[r:PRACTICED {
+CREATE (a)-[r:PRACTICED {
   timestamp: datetime(),
   duration: 'PT30M',
   quality_rating: 7,
@@ -88,9 +88,9 @@ CREATE (p)-[r:PRACTICED {
 }]->(s)
 ```
 
-## EXECUTED (Player→Drill)
+## EXECUTED (Person:Athlete→Drill)
 
-Records when a player has completed a specific drill.
+Records when an athlete has completed a specific drill.
 
 **Properties:**
 - `timestamp`: When the drill was executed
@@ -101,9 +101,9 @@ Records when a player has completed a specific drill.
 
 **Example:**
 ```cypher
-MATCH (p:Player {id: 'player123'})
+MATCH (a:Person:Athlete {id: 'athlete123'})
 MATCH (d:Drill {name: 'Serve Target Practice'})
-CREATE (p)-[r:EXECUTED {
+CREATE (a)-[r:EXECUTED {
   timestamp: datetime(),
   completion_percentage: 100,
   performance_rating: 8,
@@ -192,32 +192,32 @@ CREATE (d)-[r:FOCUSES_ON {
 
 ## REQUIRES_COURT_CAPACITY (Drill→CourtCapacity)
 
-Defines the player count requirements for a drill per court.
+Defines the athlete count requirements for a drill per court.
 
 **Properties:**
-- `optimal_players`: Ideal number of players (typically 6)
-- `maximum_players`: Maximum allowed (never exceeds 8)
-- `rotation_efficiency`: How well players cycle through active positions
-- `adapts_to_odd_count`: Whether drill can accommodate odd player counts
+- `optimal_athletes`: Ideal number of athletes (typically 6)
+- `maximum_athletes`: Maximum allowed (never exceeds 8)
+- `rotation_efficiency`: How well athletes cycle through active positions
+- `adapts_to_odd_count`: Whether drill can accommodate odd athlete counts
 
 **Example:**
 ```cypher
 MATCH (d:Drill {name: 'King of the Court'})
 MATCH (cc:CourtCapacity)
 CREATE (d)-[r:REQUIRES_COURT_CAPACITY {
-  optimal_players: 6,
-  maximum_players: 8,
+  optimal_athletes: 6,
+  maximum_athletes: 8,
   rotation_efficiency: "high",
   adapts_to_odd_count: true
 }]->(cc)
 ```
 
-## PARTICIPATES_AS (Coach→PracticeParticipant)
+## PARTICIPATES_AS (Person:Coach→PracticeParticipant)
 
-Defines how a coach participates in practice sessions as a player.
+Defines how a coach participates in practice sessions as an athlete.
 
 **Properties:**
-- `role`: Participation type (regular player, specialized position)
+- `role`: Participation type (regular athlete, specialized position)
 - `primary_purpose`: Main reason for participation
 - `secondary_purpose`: Additional benefits
 - `usage_frequency`: How often coach participates
@@ -225,10 +225,10 @@ Defines how a coach participates in practice sessions as a player.
 
 **Example:**
 ```cypher
-MATCH (c:Coach {id: 'coach456'})
+MATCH (c:Person:Coach {id: 'coach456'})
 MATCH (pp:PracticeParticipant)
 CREATE (c)-[r:PARTICIPATES_AS {
-  role: "Fill-in player",
+  role: "Fill-in athlete",
   primary_purpose: "Balance teams for 2v2 structure",
   secondary_purpose: "Demonstrate techniques in game context",
   usage_frequency: "As needed for odd numbers",
@@ -236,7 +236,7 @@ CREATE (c)-[r:PARTICIPATES_AS {
 }]->(pp)
 ```
 
-## APPLIES_CONSTRAINT (Coach→GameplayConstraint)
+## APPLIES_CONSTRAINT (Person:Coach→GameplayConstraint)
 
 Connects a coach to gameplay constraints they implement during practice.
 
@@ -248,10 +248,10 @@ Connects a coach to gameplay constraints they implement during practice.
 
 **Example:**
 ```cypher
-MATCH (c:Coach {id: 'coach456'})
+MATCH (c:Person:Coach {id: 'coach456'})
 MATCH (gc:GameplayConstraint {name: 'Shot Selection Constraint'})
 CREATE (c)-[r:APPLIES_CONSTRAINT {
-  context: "4-player gameplay focus",
+  context: "4-athlete gameplay focus",
   progression: "Begin with simple limitations, add complexity",
   feedback_approach: "Immediate during natural breaks",
   success_metrics: "Shot selection improvement in unconstrained play"
@@ -260,21 +260,21 @@ CREATE (c)-[r:APPLIES_CONSTRAINT {
 
 ## OPTIMAL_CONFIGURATION (CourtCapacity→OptimalConfiguration)
 
-Connects court capacity constraints to specific optimal player arrangements.
+Connects court capacity constraints to specific optimal athlete arrangements.
 
 **Properties:**
-- `player_count`: Number of players in this configuration
-- `formation`: How players are organized
-- `active_time_percentage`: Portion of time players are active
-- `rotation_trigger`: What causes player rotation
-- `rotation_pattern`: How players cycle through positions
+- `athlete_count`: Number of athletes in this configuration
+- `formation`: How athletes are organized
+- `active_time_percentage`: Portion of time athletes are active
+- `rotation_trigger`: What causes athlete rotation
+- `rotation_pattern`: How athletes cycle through positions
 
 **Example:**
 ```cypher
 MATCH (cc:CourtCapacity)
 MATCH (oc:OptimalConfiguration)
 CREATE (cc)-[r:OPTIMAL_CONFIGURATION {
-  player_count: 6,
+  athlete_count: 6,
   formation: "Three teams of 2 rotating (king of the court)",
   active_time_percentage: 67,
   rotation_trigger: "Point completion",
@@ -282,4 +282,4 @@ CREATE (cc)-[r:OPTIMAL_CONFIGURATION {
 }]->(oc)
 ```
 
-These relationships form the foundation of the beach volleyball training knowledge graph, connecting skills, drills, and conceptual frameworks in a semantically rich structure that supports practice planning and player development.
+These relationships form the foundation of the beach volleyball training knowledge graph, connecting skills, drills, and conceptual frameworks in a semantically rich structure that supports practice planning and athlete development.
