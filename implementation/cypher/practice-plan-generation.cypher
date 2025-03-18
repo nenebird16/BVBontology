@@ -39,7 +39,7 @@ ORDER BY drill.intensity;
 
 // Generate a personalized practice plan for a specific athlete
 // Useful for: Addressing individual skill gaps
-MATCH (a:Athlete {name: $athleteName})
+MATCH (a:Person:Athlete {name: $athleteName})
 MATCH (a)-[assessed:SELF_ASSESSED]->(s:Skill)
 WHERE assessed.rating < 7
 WITH a, s, assessed ORDER BY assessed.rating LIMIT 3
@@ -66,7 +66,7 @@ RETURN skill.name AS focus_skill,
 // Create a team practice plan based on common skill gaps
 // Useful for: Group training sessions
 MATCH (tg:TrainingGroup {name: $groupName})
-MATCH (a:Athlete)-[:MEMBER_OF]->(tg)
+MATCH (a:Person:Athlete)-[:MEMBER_OF]->(tg)
 MATCH (a)-[assessed:SELF_ASSESSED]->(s:Skill)
 WITH tg, s, avg(assessed.rating) AS avg_rating, count(a) AS athlete_count
 WHERE avg_rating < 7 AND athlete_count > 3
@@ -137,7 +137,7 @@ ORDER BY d.intensity, d.duration;
 
 // Create a practice plan that builds on previous session
 // Useful for: Continuous development
-MATCH (a:Athlete {name: $athleteName})
+MATCH (a:Person:Athlete {name: $athleteName})
 MATCH (a)-[executed:EXECUTED]->(d:Drill)
 WHERE datetime() - executed.timestamp < duration('P7D')
 WITH a, executed, d
