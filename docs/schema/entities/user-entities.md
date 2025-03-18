@@ -2,13 +2,13 @@
 
 This document defines the user-related entity types in the BeachBook knowledge graph.
 
-## Player
+## Person:Athlete
 
-Individual athlete/user of the platform.
+Individual who participates in beach volleyball training and competition.
 
 **Properties:**
 - `id`: Unique identifier
-- `name`: Player's name
+- `name`: Athlete's name
 - `level`: Skill level (beginner, intermediate, advanced, elite)
 - `preferences`: UI and notification preferences
 - `position`: Volleyball position specialization
@@ -17,7 +17,7 @@ Individual athlete/user of the platform.
 **Usage Context:**
 Primary user of the system who creates reflections, sets goals, and tracks progress.
 
-## Coach
+## Person:Coach
 
 Instructor or mentor who provides guidance and feedback.
 
@@ -27,16 +27,16 @@ Instructor or mentor who provides guidance and feedback.
 - `specialties`: Areas of coaching expertise
 - `philosophy`: Coaching approach and values
 - `certification_level`: Professional certifications
-- `can_participate`: Whether coach can join as player
+- `can_participate`: Whether coach can join as athlete
 - `playing_level`: Coach's playing ability (beginner, intermediate, advanced, elite)
 - `playing_specialization`: Coach's preferred position
 - `participation_availability`: When coach is willing to participate
 - `participation_constraints`: Limitations on coach's playing role
 
 **Usage Context:**
-Creates practice plans, provides feedback, and views player-shared content. May participate as player when needed for numbers or demonstration.
+Creates practice plans, provides feedback, and views athlete-shared content. May participate as athlete when needed for numbers or demonstration.
 
-## Trainer
+## Person:Trainer
 
 Strength and conditioning specialist focused on physical development.
 
@@ -50,22 +50,22 @@ Strength and conditioning specialist focused on physical development.
 **Usage Context:**
 Designs workouts, monitors physical development, and coordinates with coaches.
 
-## ParentGuardian
+## Person:ParentGuardian
 
-Oversight role for youth players.
+Oversight role for youth athletes.
 
 **Properties:**
 - `id`: Unique identifier
 - `name`: Parent/guardian's name
-- `players_supervised`: Links to supervised players
+- `athletes_supervised`: Links to supervised athletes
 - `notification_preferences`: Communication settings
 
 **Usage Context:**
-Receives updates on player activities and provides permissions for minors.
+Receives updates on athlete activities and provides permissions for minors.
 
 ## Team
 
-Group of players who practice and compete together.
+Group of athletes who practice and compete together.
 
 **Properties:**
 - `name`: Team name
@@ -75,9 +75,9 @@ Group of players who practice and compete together.
 - `formation`: Team composition and structure
 
 **Usage Context:**
-Organizes players and provides context for team-wide insights.
+Organizes athletes and provides context for team-wide insights.
 
-## Administrator
+## Person:Administrator
 
 System management role with elevated permissions.
 
@@ -90,7 +90,7 @@ System management role with elevated permissions.
 **Usage Context:**
 Manages system settings, user accounts, and content moderation.
 
-## Analyst
+## Person:Analyst
 
 Performance evaluation specialist.
 
@@ -108,10 +108,10 @@ Performs advanced data analysis and provides performance insights.
 Role that a person takes in a practice session.
 
 **Properties:**
-- `role`: How they participate (player, server, observer)
+- `role`: How they participate (athlete, server, observer)
 - `rotation_pattern`: How they cycle through activities
 - `active_time_percentage`: Portion of practice actively participating
 - `focus_elements`: Specific areas to concentrate on
 
 **Usage Context:**
-Defines participation pattern for coaches, players, and guests in practice.
+Defines participation pattern for coaches, athletes, and guests in practice.
